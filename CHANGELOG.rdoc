@@ -3,3 +3,6 @@
 
 Initial release - split from compositing-sorted-array. 
 
+== 6/15/2012
+
+fixed SortedArray::Interface to include Array::Sorted::Interface
