@@ -94,7 +94,7 @@ module ::Array::Sorted::Interface
   ###############################
 
   def perform_set_between_hooks( index, object )
-    
+
     unless index >= count
       delete_at( index )
     end
