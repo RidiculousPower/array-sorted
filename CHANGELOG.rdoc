@@ -5,4 +5,8 @@ Initial release - split from compositing-sorted-array.
 
 == 6/15/2012
 
-fixed SortedArray::Interface to include Array::Sorted::Interface
+fixed SortedArray::Interface to include Array::Sorted::ArrayInterface
+
+== 6/30/2012
+
+Renamed from sorted-array to array-sorted. File schema updated to reflect gem name.

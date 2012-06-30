@@ -1,7 +1,7 @@
 
 module ::SortedArray::Interface
 
-  include ::Array::Sorted::Interface
+  include ::Array::Sorted::ArrayInterface
   include ::HookedArray::Interface
   
   instances_identify_as!( ::SortedArray )

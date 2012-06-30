@@ -1,6 +1,10 @@
 
-module ::Array::Sorted::Interface
-
+module ::Array::Sorted::ArrayInterface
+  
+  include ::Array::Hooked::ArrayInterface
+  
+  instances_identify_as!( ::Array::Sorted )
+  
   ################
   #  initialize  #
   ################

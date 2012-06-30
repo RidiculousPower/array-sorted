@@ -1,6 +1,6 @@
 # Sorted Array #
 
-http://rubygems.org/gems/sorted-array
+http://rubygems.org/gems/array-sorted
 
 # Description #
 
@@ -12,11 +12,11 @@ A subclass of Array::Hooked that also keeps array sorted.
 
 # Install #
 
-* sudo gem install sorted-array
+* sudo gem install array-sorted
 
 # Usage #
 
-Just like Array or Array::Hooked (provided by hooked-array)! Provides additional support in :initialize to declare sorting block.
+Just like Array or Array::Hooked (provided by hooked_array)! Provides additional support in :initialize to declare sorting block.
 
 # License #
 

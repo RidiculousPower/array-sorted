@@ -1,6 +1,6 @@
 
 class ::Array::Sorted < ::Array::Hooked
-  
-  include ::Array::Sorted::Interface
-    
+end
+
+class ::SortedArray < ::Array::Sorted
 end

@@ -1,5 +1,5 @@
 
-require_relative '../../lib/sorted-array.rb'
+require_relative '../../lib/array-sorted.rb'
 
 describe ::Array::Sorted do
 

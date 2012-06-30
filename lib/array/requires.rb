@@ -1,24 +1,17 @@
 
-require 'hooked-array'
-
-class ::Array::Sorted < ::Array::Hooked
-end
-class ::SortedArray < ::Array::Sorted
-end
-
-basepath = 'sorted-array/Array/Sorted'
+basepath = 'sorted'
 
 files = [
   
-  'Interface'
+  'array_interface'
   
 ]
 
-second_basepath = 'sorted-array/SortedArray'
+second_basepath = '../sorted_array'
 
 second_files = [
   
-  'Interface'
+  'array_interface'
   
 ]
 
@@ -31,3 +24,4 @@ end
 
 require_relative( basepath + '.rb' )
 require_relative( second_basepath + '.rb' )
+
