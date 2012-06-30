@@ -4,9 +4,9 @@ Gem::Specification.new do |spec|
 
   spec.name                      =  'array-sorted'
   spec.rubyforge_project         =  'array-sorted'
-  spec.version                   =  '1.0.0'
+  spec.version                   =  '1.1.0'
 
-  spec.summary                   =  "Provides Array::Sorted and SortedArray."
+  spec.summary                   =  "Provides Array::Sorted."
   spec.description               =  "A subclass of Array::Hooked that also keeps array sorted."
 
   spec.authors                   =  [ 'Asher' ]

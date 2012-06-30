@@ -11,9 +11,9 @@ module ::Array::Sorted::ArrayInterface
 
   # Adds optional block for retaining sort order.
   # @yield Block to use to determine sort order.
-  def initialize( *args, & sort_object_block )
+  def initialize( configuration_instance = nil, *args, & sort_object_block )
     
-    super( *args )
+    super( configuration_instance, *args )
     
     if block_given?
       @sort_object_block = sort_object_block
