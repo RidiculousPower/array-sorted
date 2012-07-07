@@ -9,8 +9,13 @@ module ::Array::Sorted::ArrayInterface
   #  initialize  #
   ################
 
-  # Adds optional block for retaining sort order.
-  # @yield Block to use to determine sort order.
+  ###
+  # Adds optional block for object by which sort order is determined.
+  #
+  # @yield [object] Block to use to determine sort order object.
+  # @yieldparam object Array member or insert item.
+  # @yieldreturn [Object] Object to be used for sort order
+  #
   def initialize( configuration_instance = nil, *args, & sort_object_block )
     
     super( configuration_instance, *args )
@@ -20,6 +25,18 @@ module ::Array::Sorted::ArrayInterface
     end
     
   end
+
+  #####################
+  #  unsorted_insert  #
+  #####################
+
+  alias_method :unsorted_insert, :hooked_insert
+
+  ##################
+  #  unsorted_set  #
+  ##################
+
+  alias_method :unsorted_set, :hooked_set
   
   ##############
   #  reverse!  #
@@ -93,6 +110,10 @@ module ::Array::Sorted::ArrayInterface
     
   end
 
+  ######################################################################################################################
+      private ##########################################################################################################
+  ######################################################################################################################
+
   ###############################
   #  perform_set_between_hooks  #
   ###############################
@@ -103,7 +124,9 @@ module ::Array::Sorted::ArrayInterface
       delete_at( index )
     end
     
-    return perform_insert_between_hooks( index, object )
+    index = perform_single_object_insert_between_hooks( index, object )
+    
+    return false
     
   end
   
@@ -117,57 +140,91 @@ module ::Array::Sorted::ArrayInterface
 
     # we have to have at least one member for comparison-based insert (to retain sorted order)
 
-    objects.each do |this_object|
+    objects.each_with_index do |this_object, this_index|
+      perform_single_object_insert_between_hooks( index + this_index, this_object )          
+    end
+    
+    # return index our insert began with
+    return index
+    
+  end
 
-      insert_occurred = false
+  #############################
+  #  perform_unsorted_insert  #
+  #############################
+  
+  def perform_unsorted_insert( index, object )
+    
+    return undecorated_insert( index, object )
+    
+  end
 
-      if this_object.nil?
-        if @sort_order_reversed
-          super( count, this_object )
-        else
-          super( 0, this_object )
-        end
-        next
-      end
-      
+  #################################
+  #  get_index_for_sorted_insert  #
+  #################################
+  
+  def get_index_for_sorted_insert( object )
+    
+    index = nil
+    
+    if object.nil?
+
+      index = @sort_order_reversed ? count : 0
+    
+    else
+
       self.each_with_index do |this_member, this_index|
-        
-        insert_sort_object = this_object
+
+        insert_sort_object = object
         existing_sort_object = this_member
-        
+
         if @sort_object_block
-          insert_sort_object = @sort_object_block.call( this_object )
-          existing_sort_object = @sort_object_block.call( this_member )
+          insert_sort_object = @sort_object_block.call( object )
+          existing_sort_object = @sort_object_block.call( object )
         end
-        
+
         if @sort_order_reversed
-                    
+
           case insert_sort_object <=> existing_sort_object
             when 0, 1
-              super( this_index, this_object )
-              insert_occurred = true
+              index = this_index
               break
           end
-          
+
         else
-          
+
           case insert_sort_object <=> existing_sort_object
             when 0, -1
-              super( this_index, this_object )
-              insert_occurred = true
+              index = this_index
               break
           end
-          
-        end
-        
-      end
-    
-      unless insert_occurred
-        super( count, this_object )
-      end
-      
-    end
 
+        end
+
+      end
+
+      unless index
+        index = count
+      end
+
+    end
+        
+    return index
+    
+  end
+
+  ################################################
+  #  perform_single_object_insert_between_hooks  #
+  ################################################
+  
+  def perform_single_object_insert_between_hooks( index, object )
+
+    insert_index = get_index_for_sorted_insert( object )
+    
+    perform_unsorted_insert( insert_index, object )
+    
+    return insert_index
+    
   end
   
 end
