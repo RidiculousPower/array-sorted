@@ -10,3 +10,7 @@ fixed SortedArray::Interface to include Array::Sorted::ArrayInterface
 == 6/30/2012
 
 Renamed from sorted-array to array-sorted. File schema updated to reflect gem name.
+
+== 7/18/2012
+
+Fix for sort-by block.

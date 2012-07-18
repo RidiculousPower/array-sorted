@@ -19,7 +19,7 @@ module ::Array::Sorted::ArrayInterface
   def initialize( configuration_instance = nil, *args, & sort_object_block )
     
     super( configuration_instance, *args )
-    
+
     if block_given?
       @sort_object_block = sort_object_block
     end
@@ -99,11 +99,14 @@ module ::Array::Sorted::ArrayInterface
 
   def sort_by!( & block )
 
-    return to_enum unless block_given?
+    if block_given?
+      @sort_object_block = block
+    else
+      return to_enum unless block_given?
+    end
   
     self.each do |this_member|
-      sort_object = @sort_object_block ? @sort_object_block.call( this_member ) : this_member
-      yield( sort_object )
+      @sort_object_block.call( this_member )
     end
     
     return self
@@ -179,8 +182,8 @@ module ::Array::Sorted::ArrayInterface
         existing_sort_object = this_member
 
         if @sort_object_block
-          insert_sort_object = @sort_object_block.call( object )
-          existing_sort_object = @sort_object_block.call( object )
+          insert_sort_object = @sort_object_block.call( insert_sort_object )
+          existing_sort_object = @sort_object_block.call( existing_sort_object )
         end
 
         if @sort_order_reversed
