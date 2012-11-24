@@ -12,9 +12,17 @@ module ::Array::Sorted::ArrayInterface
   ###
   # Adds optional block for object by which sort order is determined.
   #
-  # @yield [object] Block to use to determine sort order object.
-  # @yieldparam object Array member or insert item.
-  # @yieldreturn [Object] Object to be used for sort order
+  # @yield [object] 
+  #
+  #        Block to use to determine sort order object.
+  #
+  # @yieldparam object 
+  #
+  #             Array member or insert item.
+  #
+  # @yieldreturn [Object] 
+  #
+  #              Object to be used for sort order
   #
   def initialize( configuration_instance = nil, *args, & sort_object_block )
     
@@ -29,7 +37,7 @@ module ::Array::Sorted::ArrayInterface
   #####################
   #  unsorted_insert  #
   #####################
-
+  
   alias_method :unsorted_insert, :hooked_insert
 
   ##################
@@ -72,6 +80,7 @@ module ::Array::Sorted::ArrayInterface
     return self
     
   end
+  
   alias_method :map!, :collect!
   
   ###########
@@ -117,6 +126,20 @@ module ::Array::Sorted::ArrayInterface
       private ##########################################################################################################
   ######################################################################################################################
 
+  ################################################
+  #  perform_single_object_insert_between_hooks  #
+  ################################################
+  
+  def perform_single_object_insert_between_hooks( index, object )
+
+    insert_index = get_index_for_sorted_insert( object )
+    
+    perform_unsorted_insert( insert_index, object )
+    
+    return insert_index
+    
+  end
+  
   ###############################
   #  perform_set_between_hooks  #
   ###############################
@@ -216,18 +239,4 @@ module ::Array::Sorted::ArrayInterface
     
   end
 
-  ################################################
-  #  perform_single_object_insert_between_hooks  #
-  ################################################
-  
-  def perform_single_object_insert_between_hooks( index, object )
-
-    insert_index = get_index_for_sorted_insert( object )
-    
-    perform_unsorted_insert( insert_index, object )
-    
-    return insert_index
-    
-  end
-  
 end
