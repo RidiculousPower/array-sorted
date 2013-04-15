@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 require_relative '../../lib/array-sorted.rb'
 
@@ -444,7 +445,7 @@ describe ::Array::Sorted do
 
     sorted_array = ::Array::Sorted.new
 
-    sorted_array += :A
+    sorted_array.unshift( :A )
     sorted_array.should == [ :A ]
 
     sorted_array.unshift( :B )
@@ -460,13 +461,13 @@ describe ::Array::Sorted do
 
     sorted_array = ::Array::Sorted.new
 
-    sorted_array += :A
+    sorted_array.push( :A )
     sorted_array.should == [ :A ]
 
     sorted_array.pop.should == :A
     sorted_array.should == [ ]
 
-    sorted_array += :B
+    sorted_array.push( :B )
     sorted_array.should == [ :B ]
 
   end
@@ -479,13 +480,13 @@ describe ::Array::Sorted do
 
     sorted_array = ::Array::Sorted.new
 
-    sorted_array += :A
+    sorted_array.push( :A )
     sorted_array.should == [ :A ]
 
     sorted_array.shift.should == :A
     sorted_array.should == [ ]
 
-    sorted_array += :B
+    sorted_array.push( :B )
     sorted_array.should == [ :B ]
 
   end
@@ -498,13 +499,13 @@ describe ::Array::Sorted do
 
     sorted_array = ::Array::Sorted.new
 
-    sorted_array += :A
+    sorted_array.push( :A )
     sorted_array.should == [ :A ]
 
     sorted_array.slice!( 0, 1 ).should == [ :A ]
     sorted_array.should == [ ]
 
-    sorted_array += :B
+    sorted_array.push( :B )
     sorted_array.should == [ :B ]
 
   end
@@ -517,13 +518,13 @@ describe ::Array::Sorted do
 
     sorted_array = ::Array::Sorted.new
 
-    sorted_array += :A
+    sorted_array.push( :A )
     sorted_array.should == [ :A ]
 
     sorted_array.clear
     sorted_array.should == [ ]
 
-    sorted_array += :B
+    sorted_array.push( :B )
     sorted_array.should == [ :B ]
 
   end
@@ -536,7 +537,7 @@ describe ::Array::Sorted do
     
     class ::Array::Sorted::SubMockPreSet < ::Array::Sorted
       
-      def pre_set_hook( index, object, is_insert = false )
+      def pre_set_hook( index, object, is_insert, insert_count )
         return :some_other_value
       end
       
@@ -558,7 +559,7 @@ describe ::Array::Sorted do
 
     class ::Array::Sorted::SubMockPostSet < ::Array::Sorted
       
-      def post_set_hook( index, object, is_insert = false )
+      def post_set_hook( index, object, is_insert, insert_count )
         return :some_other_value
       end
       
@@ -566,7 +567,7 @@ describe ::Array::Sorted do
     
     sorted_array = ::Array::Sorted::SubMockPostSet.new
 
-    sorted_array.push( :some_value ).should == [ :some_other_value ]
+    sorted_array.push( :some_value )
     
     sorted_array.should == [ :some_value ]
     
@@ -580,7 +581,7 @@ describe ::Array::Sorted do
     
     class ::Array::Sorted::SubMockPreGet < ::Array::Sorted
       
-      def pre_get_hook( index )
+      def pre_get_hook( index, length )
         return false
       end
       
@@ -603,7 +604,7 @@ describe ::Array::Sorted do
 
     class ::Array::Sorted::SubMockPostGet < ::Array::Sorted
       
-      def post_get_hook( index, object )
+      def post_get_hook( index, object, length )
         return :some_other_value
       end
       

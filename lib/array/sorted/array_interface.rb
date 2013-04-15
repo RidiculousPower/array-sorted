@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 module ::Array::Sorted::ArrayInterface
   
@@ -28,9 +29,7 @@ module ::Array::Sorted::ArrayInterface
     
     super( configuration_instance, *args )
 
-    if block_given?
-      @sort_object_block = sort_object_block
-    end
+    @sort_object_block = sort_object_block if block_given?
     
   end
 
@@ -91,7 +90,7 @@ module ::Array::Sorted::ArrayInterface
 
     if block_given?
       self.each_with_index do |this_member, index|
-        unless index + 1 == count
+        unless index + 1 == size
           sort_object = @sort_object_block ? @sort_object_block.call( this_member ) : this_member
           yield( sort_object, self[ index + 1 ] )
         end
@@ -111,32 +110,37 @@ module ::Array::Sorted::ArrayInterface
     if block_given?
       @sort_object_block = block
     else
-      return to_enum unless block_given?
+      return to_enum
     end
   
-    self.each do |this_member|
-      @sort_object_block.call( this_member )
-    end
+    self.each { |this_member| @sort_object_block.call( this_member ) }
     
     return self
     
   end
 
-  ######################################################################################################################
-      private ##########################################################################################################
-  ######################################################################################################################
+  ##############
+  #  shuffle!  #
+  ##############
 
+  ###
+  # Does not shuffle elements in self in place. Does nothing. Remains sorted.
+  #
+  def shuffle!( random_number_generator = nil )
+
+    return self
+
+  end
+  
   ################################################
   #  perform_single_object_insert_between_hooks  #
   ################################################
   
   def perform_single_object_insert_between_hooks( index, object )
 
-    insert_index = get_index_for_sorted_insert( object )
+    perform_unsorted_insert( index = get_index_for_sorted_insert( object ), object )
     
-    perform_unsorted_insert( insert_index, object )
-    
-    return insert_index
+    return index
     
   end
   
@@ -146,9 +150,7 @@ module ::Array::Sorted::ArrayInterface
 
   def perform_set_between_hooks( index, object )
 
-    unless index >= count
-      delete_at( index )
-    end
+    delete_at( index ) unless index >= size
     
     index = perform_single_object_insert_between_hooks( index, object )
     
@@ -195,7 +197,7 @@ module ::Array::Sorted::ArrayInterface
     
     if object.nil?
 
-      index = @sort_order_reversed ? count : 0
+      index = @sort_order_reversed ? size : 0
     
     else
 
@@ -229,9 +231,7 @@ module ::Array::Sorted::ArrayInterface
 
       end
 
-      unless index
-        index = count
-      end
+      index = size unless index
 
     end
         
