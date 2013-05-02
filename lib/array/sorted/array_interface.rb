@@ -69,7 +69,7 @@ module ::Array::Sorted::ArrayInterface
     return to_enum unless block_given?
     
     replacement_array = [ ]
-    self.each_with_index do |this_object, index|
+    each_with_index do |this_object, index|
       replacement_object = yield( this_object )
       replacement_array[ index ] = replacement_object
     end
@@ -89,11 +89,13 @@ module ::Array::Sorted::ArrayInterface
   def sort!( & block )
 
     if block_given?
-      self.each_with_index do |this_member, index|
-        unless index + 1 == size
-          sort_object = @sort_object_block ? @sort_object_block.call( this_member ) : this_member
-          yield( sort_object, self[ index + 1 ] )
-        end
+      @sort_block = block
+    end
+
+    each_with_index do |this_member, index|
+      unless index + 1 == size
+        sort_object = @sort_object_block ? @sort_object_block.call( this_member ) : this_member
+        @sort_block.call( sort_object, self[ index + 1 ] )
       end
     end
     
@@ -113,7 +115,7 @@ module ::Array::Sorted::ArrayInterface
       return to_enum
     end
   
-    self.each { |this_member| @sort_object_block.call( this_member ) }
+    each { |this_member| @sort_object_block.call( this_member ) }
     
     return self
     
@@ -195,13 +197,21 @@ module ::Array::Sorted::ArrayInterface
     
     index = nil
     
+    element_count = size
+    
     if object.nil?
-
-      index = @sort_order_reversed ? size : 0
+      
+      if @sort_order_reversed
+        index = element_count
+      elsif element_count > 0 and first.nil?
+        index = rindex( nil ) + 1
+      else
+        index = 0
+      end
     
     else
 
-      self.each_with_index do |this_member, this_index|
+      each_with_index do |this_member, this_index|
 
         insert_sort_object = object
         existing_sort_object = this_member
@@ -231,7 +241,7 @@ module ::Array::Sorted::ArrayInterface
 
       end
 
-      index = size unless index
+      index = element_count unless index
 
     end
         
